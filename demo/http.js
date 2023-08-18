@@ -2,6 +2,9 @@
 
 // 1. 导入http模块
 const http = require('http');
+// 引入模块
+const fs = require('fs')
+const path = require('path')
 
 // 2. 创建一个web服务实例
 const server = http.createServer();
@@ -12,16 +15,23 @@ server.on('request', (req, res) => {
     console.log('收到请求');
 
     const url = req.url;
-    let content = '<h1>404 NOT Found!</h1>'
+    let fpath = ''
     
-    if (url === '/' || url === '/index.html') {
-        content = '<h1>首页</h1>';
-    } else if (url === '/about.html') {
-        content = '<h1>关于页面</h1>';
+    if (url === '/') {
+        fpath = path.join(__dirname, '../static/index.html')
+    } else {
+        fpath = path.join(__dirname, '../static', url)
     }
+    console.log(fpath)
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
-    res.end(content);
+    
+    fs.readFile(fpath, 'utf-8', (err, dataStr) => {
+        if (err) {
+            return res.end('404 NOT FOUNT')
+        }
+        res.end(dataStr)
+    })
 })
 
 // 4. 启动服务, 监听端口

@@ -1,8 +1,0 @@
-{
-    "name": "my_package",
-    "version": "1.0.0",
-    "main": "index.js",
-    "description": "提供某某功能，这里是模拟创建包",
-    "keywords": ["demo"],
-    "license": "ISC"
-}

@@ -38,6 +38,21 @@ Node.js 中的第三方模块又叫做包。包是基于内置模块封装出来
 
 `require()`
 
+## moment
+
+安装使用 moment 模块。
+
+```javascript
+// npm install moment
+const moment = require('moment')
+
+// moment() 获取当前时间
+// format 格式化时间
+const date = moment().format('YYYY-MM-DD HH:mm:ss')
+
+console.log(date)
+```
+
 ## 配置文件
 
 装包完成后，会在文件夹下生成 node_modules 的文件夹和 package-lock.json 的配置文件。
@@ -104,6 +119,32 @@ npm uninstall 包名 -g
 - 包必须以单独的目录存在。
 - 包的顶级目录下要必须包含 package.json 这个包管理配置文件。
 - package.json 中必须包含 name，version，main 这三个属性，分别代表包的名字、版本号、包的入口。
+
+## 自定义包
+
+自定义一个包的过程：
+
+1. 新建文件夹，作为包的根目录。
+2. 在根目录下新建三个文件：
+   - package.json（包管理配置文件）
+   - index.js （包的入口文件） 
+   - README.md （包的说明文档）
+3. 将不同的功能进行模块化拆分开发，在 index.js 中，导入功能模块，得到需要向外共享的方法，使用 module.exports 把对应的方法共享出去。
+
+---
+
+**package.json文件模板**
+
+```json
+{
+    "name": "my_package",
+    "version": "1.0.0",
+    "main": "index.js",
+    "description": "提供某某功能，这里是模拟创建包",
+    "keywords": ["demo"],
+    "license": "ISC"
+}
+```
 
 ## 包发布
 
