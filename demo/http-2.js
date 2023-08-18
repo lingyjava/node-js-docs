@@ -12,9 +12,9 @@ server.on('request', function(req, res) {
     let fpath = ''
 
     if (url === '/') {
-        fpath = path.join(__dirname, './static/index.html')
+        fpath = path.join(__dirname, '../static/index.html')
     } else {
-        fpath = path.join(__dirname, './static', url)
+        fpath = path.join(__dirname, '../static', url)
     }
 
     console.log(fpath)
