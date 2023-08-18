@@ -10,3 +10,5 @@ node.js相关文档记录。
 | [2·fs模块](docs/2·fs模块.md)     |
 | [3·path模块](docs/3·path模块.md) |
 | [4·http模块](docs/4·http模块.md) |
+| [5·模块化](docs/5·模块化.md) |
+| [6·npm](docs/6·npm.md) |

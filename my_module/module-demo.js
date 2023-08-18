@@ -1,15 +1,5 @@
-const a = 18
+const module = require('./my-module.js')
+console.log(module)
 
-function hello() {
-    console.log('hello world')
-}
-
-const obj = {
-    a,
-    hello
-}
-
-// module.exports = hello
-// module.exports = obj
-
-exports.age = '18'
+console.log(module.a)
+console.log(module.hello)
