@@ -5,8 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+    
 </head>
 <body>
-    <p>hello world</p>
+    <p id="hello">hello world</p>
+
+    <script>
+        $('#hello').on('click', function (param) {  
+            $.ajax({
+                method: 'GET',
+                url: '/api/jsonp/test',
+                dataType: 'jsonp',
+                success: function (res) {  
+                    console.log(res)
+                }
+            })
+        })
+    </script>
 </body>
 </html>

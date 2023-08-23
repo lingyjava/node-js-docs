@@ -111,3 +111,27 @@ app.use(function (err, req, res, next) {
     console.log('发生错误')
     res.send('err:' + err.message)
 })
+
+// 创建 JSONP 接口
+app.get('/api/jsonp/test', (req, res) => {
+    // 获取回调函数名
+    const callbackFuncName = req.query.callback
+    // 设置返回数据
+    const data = {
+        name: 'ly',
+        age : 22
+    }
+    // 拼接一个函数调用的字符串
+    const scriptStr = `${callbackFuncName}(${JSON.stringify(data)})`
+    // 响应函数调用字符串，给 script 标签解析
+    res.send(scriptStr)
+})
+
+// 配置cors
+const cors = require('cors')
+app.use(cors())
+
+// 创建 cors 接口
+app.get('/api/cors/test', (req, res) => {
+    res.send('/api/cors/test ok')
+})

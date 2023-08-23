@@ -19,6 +19,8 @@
   - [跨域资源共享](#跨域资源共享)
     - [cors 中间件](#cors-中间件)
     - [响应头](#响应头)
+    - [请求分类](#请求分类)
+    - [JSONP](#jsonp)
 
 
 ## what’s this
@@ -379,3 +381,103 @@ Express 的第三方中间件 cors 可以很方便地解决跨域问题。
 
 
 如果客户端向服务器发送了额外的请求头信息，则需要在服务器端，通过 Access-Control-Allow-Headers 对额外的请求头进行声明，否则这次请求会失败。
+
+`res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Custom-Header')`
+
+---
+
+**Access-Control-Allow-Headers**
+
+CORS 默认仅支持客户端发起 GET、POST、HEAD 请求，如果客户端希望通过 PUT、DELETE 等方式请求，则需要在服务器端，通过 Access-Control-Alow-Methods 来指明实际请求所允许使用的 HTTP 方法。
+
+`res.setHeader('Access-Control-Alow-Methods', 'POST, GET, DELETE, HEAD')`
+
+`res.setHeader('Access-Control-Alow-Methods', '*')`
+
+### 请求分类
+
+客户端在请求 CORS 接口时，根据请求方式和请求头的不同，可以将 CORS 的请求分为两类：
+
+**简单请求**：请求方式为 GET、POST、HEAD，且无自定义的请求头字段。客户端与服务器之间只会发生一次请求。
+
+**预检请求**：除 GET、POST、HEAD 以外的请求方式，包含自定义请求头字段，发送 application/json 格式数据。
+
+发送预检请求时，在浏览器与服务器正式通信之前，浏览器会先发送 OPTION 请求进行预检，获知服务器是否允许该请求。服务器成功响应预检请求后，才会发送真正的请求，并且携带真实数据。所以客户端与服务器之间会发生两次请求。
+
+### JSONP
+
+浏览器端通过 script 标签的 src 属性，请求服务器上的数据，服务器返回一个函数的调用。这种请求数据
+的方式叫做 JSONP。
+
+JSONP 没有使用 XMLHttpRequest 对象，不属于 Ajax 请求。仅支持 GET 请求，不支持 POST、PUT、DELETE 等请求
+
+如果项目中已经配置了 CORS 跨域资源共享，为了防止冲突，必须在配置 CORS 中间件之前声明 JSONP 的接口。否则 JSONP 接口会被处理成开启了 CORS 的接口。
+
+---
+
+实现步骤：
+
+1. 获取客户端发送的回调函数名。
+2. 准备发送给客户端的数据。
+3. 拼接出一个函数调用的字符串。
+4. 将函数调用的字符串，响应给客户端的 script 标签进行解析执行。
+
+```javascript
+// 创建 JSONP 接口
+app.get('/api/jsonp/test', (req, res) => {
+    // 获取回调函数名
+    const callbackFuncName = req.query.callback
+    // 设置返回数据
+    const data = {
+        name: 'ly',
+        age : 22
+    }
+    // 拼接一个函数调用的字符串
+    const scriptStr = `${callbackFuncName}(${JSON.stringify(data)})`
+    // 响应函数调用字符串，给 script 标签解析
+    res.send(scriptStr)
+})
+
+// 配置cors
+const cors = require('cors')
+app.use(cors())
+
+// 创建 cors 接口
+app.get('/api/cors/test', (req, res) => {
+    res.send('/api/cors/test ok')
+})
+```
+
+**前端调用方式**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+
+    
+</head>
+<body>
+    <p id="hello">hello world</p>
+
+    <script>
+        $('#hello').on('click', function (param) {  
+            $.ajax({
+                method: 'GET',
+                url: '/api/jsonp/test',
+                dataType: 'jsonp',
+                success: function (res) {  
+                    console.log(res)
+                }
+            })
+        })
+    </script>
+</body>
+</html>
+```
+
