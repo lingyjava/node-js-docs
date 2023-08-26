@@ -51,3 +51,18 @@ const userMember2 = {
     salt: 'abcdefg'
 }
 const updateSqlStr = 'update user_member set ?  where id = ?'
+db.query(updateSqlStr, userMember2, (err, results) => {
+    if (err) {
+        console.log(err.message)
+    }
+    return results
+})
+
+// 删除
+const deleteSqlStr = 'delete from user_member where id = ?'
+db.query(deleteSqlStr, 5, (err, results) => {
+    if (err) {
+        console.log(err.message)
+    }
+    return results
+})
