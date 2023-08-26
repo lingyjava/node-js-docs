@@ -13,3 +13,5 @@ node.js相关文档记录。
 | [5·模块化](docs/5·模块化.md) |
 | [6·npm](docs/6·npm.md) |
 | [7·express](docs/7·express.md) |
+| [8·Mysql](docs/8·Mysql.md) |
+| [9·身份验证](docs/9·身份验证.md) |
