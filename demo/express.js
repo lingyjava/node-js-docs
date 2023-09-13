@@ -135,3 +135,7 @@ app.use(cors())
 app.get('/api/cors/test', (req, res) => {
     res.send('/api/cors/test ok')
 })
+
+app.get('/api/cors/test2', (req, res) => {
+    res.send('/api/cors/test2 ok')
+})
